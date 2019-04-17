@@ -7,8 +7,10 @@ else
 fi
 
 read -d '' APPLESCRIPT <<EOF
-set _isElCapitan to (system attribute "sys1") = 10 and (system attribute "sys2") = 11
-set _isSierra to (system attribute "sys1") = 10 and (system attribute "sys2") = 12
+set _major to (system attribute "sys1")
+set _minor to (system attribute "sys2")
+set _isElCapitan to _major = 10 and _minor = 11
+set _isSierra_or_later to _major > 10 or _major = 10 and _minor >= 12
 
 tell application "System Events"
     tell process "SystemUIServer"
@@ -20,7 +22,7 @@ tell application "System Events"
                     delay 0.1
                     click menu item $tvname of menu 1
             end tell
-        else if _isSierra then
+        else if _isSierra_or_later then
             if $tvname = 2 then
                 set tvname to "Turn AirPlay Off"
             else
